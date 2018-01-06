@@ -1,0 +1,58 @@
+{
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+          "dpkg -l | grep -qw sudo || apt-get install sudo",
+          "sudo mount -o loop -t iso9660 /home/vagrant/VBoxGuestAdditions.iso /mnt",
+          "sudo apt-get install linux-headers-$(uname -r) gcc make perl -y",
+          "sudo /mnt/VBoxLinuxAdditions.run"
+      ]
+    }
+  ],
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<down><enter><wait10><enter><wait5><enter><wait5><enter><wait10><wait10><wait10><wait10><enter><wait5><enter><wait5>vagrant<enter><wait5>vagrant<enter><wait5>vagrant<enter><wait5><enter><wait5>vagrant<wait5><enter><wait5>vagrant<enter><wait5><down><enter><wait10><enter><wait5><enter><wait5><enter><wait5><enter><wait5><left><enter><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><enter><wait5><enter><enter><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><enter><wait5><spacebar><down><down><down><down><down><spacebar><down><spacebar><enter><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><wait10><enter><wait5><down><enter><wait10><wait10><wait10><wait10><wait10><enter><wait10><wait10><wait10><wait10><wait10>root<enter><wait5>vagrant<enter><wait5>apt-get install sudo -y<enter><wait5>gpasswd -a vagrant sudo<enter><wait5>sed -i 's/\\(%sudo.*ALL.*\\)ALL/\\1NOPASSWD:ALL/' /etc/sudoers<enter>"
+      ],
+      "boot_wait": "5s",
+      "disk_size": 8192,
+      "guest_os_type": "Debian_64",
+      "headless": false,
+      "http_directory": "http",
+      "iso_urls": [
+        "install.iso"
+      ],
+      "iso_checksum_type": "sha256",
+      "iso_checksum": "70c6abe544ec59b0d0882c666ca0377be1b6c218655dac1f61b2c7e88c9b3d9f",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "guest_additions_path": "VBoxGuestAdditions.iso",
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "packer-devuan-x86_64",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "8192"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ]
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "output": "builds/{{.Provider}}-devuan.box",
+      "type": "vagrant"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+---
+- hosts: all
+  vars:
+    devuan_url_root: "https://mirror.leaseweb.com/devuan"
+    devuan_release: "jessie"
+    devuan_version: "1.0.0"
+    devuan_arch: "amd64"
+    devuan_installer_url: "{{ devuan_url_root }}/devuan_{{ devuan_release }}/installer-iso/devuan_{{ devuan_release }}_{{ devuan_version }}_{{ devuan_arch }}_NETINST.iso"
+    devuan_sha256_url: "{{ devuan_url_root }}/devuan_{{ devuan_release }}/installer-iso/devuan_{{ devuan_release }}_{{ devuan_version }}_{{ devuan_arch }}_NETINST.iso"
+  tasks:
+    - name: download install iso
+      get_url:
+        url: "{{ devuan_installer_url }}"
+        dest: "{{ playbook_dir }}/install.iso"
