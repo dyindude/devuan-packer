@@ -6,7 +6,12 @@
           "dpkg -l | grep -qw sudo || apt-get install sudo",
           "sudo mount -o loop -t iso9660 /home/vagrant/VBoxGuestAdditions.iso /mnt",
           "sudo apt-get install linux-headers-$(uname -r) gcc make perl -y",
-          "sudo /mnt/VBoxLinuxAdditions.run"
+          "sudo /mnt/VBoxLinuxAdditions.run",
+          "sudo umount /mnt",
+          "rm /home/vagrant/VBoxGuestAdditions.iso",
+          "mkdir /home/vagrant/.ssh",
+          "wget https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub -O /home/vagrant/.ssh/authorized_keys",
+          "sudo shutdown -h now"
       ]
     }
   ],
